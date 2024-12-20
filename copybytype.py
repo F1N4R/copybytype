@@ -2,7 +2,9 @@ import pathlib as pl
 import time, shutil
 
 def copybytype(srcInput, destInput, typesInput):
-    src = pl.Path(srcInput).rglob(typesInput)
+    fileType = typesInput.replace(" ", "")
+    fileType = fileType.split(',')
+    src = get_files(srcInput, fileType)
     dest = pl.Path(destInput)
     ok = 0
     erno = 0
@@ -27,12 +29,18 @@ def copybytype(srcInput, destInput, typesInput):
                 erno -= -1
     print('\n{} OK || {} ERNO\n'.format(ok, erno))
 
+def get_files(srcInput,extensions):
+    all_files = []
+    for ext in extensions:
+        all_files.extend(pl.Path(srcInput).rglob(ext))
+    return all_files
+
 
 
 if __name__ == "__main__":
     src = input('Soruce Folder to Grab Files:\n')
     dest = input('\nDestination Folder:\n')
-    types = input('\nFiletype: (*.png or *.*\n')
+    types = input('\nFiletype: (*.png or *.* or *.tx, *.xl, *.ts)\n')
 
     src = src.replace('"','')
     dest = dest.replace('"','')
